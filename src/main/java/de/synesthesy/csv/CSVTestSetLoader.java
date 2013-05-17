@@ -1,16 +1,18 @@
-package de.synesthesy.nn;
+package de.synesthesy.csv;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 import java.util.Vector;
 
 import au.com.bytecode.opencsv.CSVReader;
 
 public class CSVTestSetLoader{
 	private String path = "";
+	private String[] headline;
 	
 	public CSVTestSetLoader(String path){
 		this.path= path;
@@ -18,7 +20,11 @@ public class CSVTestSetLoader{
 	
 	public CSVTestSetInOutput readCSV(int inputs, int outputs) throws FileNotFoundException, IOException{
 		String [] nextLine;
-		CSVReader reader = new CSVReader(new FileReader(this.path),';','\'',1);
+		CSVReader reader = new CSVReader(new FileReader(this.path),';','\'');
+		
+		/*first list is the headline*/
+		headline = reader.readNext();
+		
 		CSVTestSetInOutput io = new CSVTestSetInOutput();
 		
 		while ((nextLine = reader.readNext()) != null) {

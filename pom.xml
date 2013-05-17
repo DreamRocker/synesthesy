@@ -33,6 +33,13 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/lib/core.jar</systemPath>
 		</dependency>
+	    <dependency>
+			<groupId>themidibus</groupId>
+			<artifactId>themidibus</artifactId>
+			<version>0.0.6</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/themidibus.jar</systemPath>
+		</dependency>
 		<dependency>
 			<groupId>net.sf.opencsv</groupId>
 			<artifactId>opencsv</artifactId>

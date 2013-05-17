@@ -7,6 +7,7 @@ import java.util.Vector;
 
 import org.encog.Encog;
 import org.encog.engine.network.activation.ActivationSigmoid;
+import org.encog.ml.MLInput;
 import org.encog.ml.data.MLData;
 import org.encog.ml.data.MLDataPair;
 import org.encog.ml.data.MLDataSet;
@@ -17,16 +18,51 @@ import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 
+import de.synesthesy.csv.CSVTestSetInOutput;
+import de.synesthesy.csv.CSVTestSetLoader;
 
-public class MusicKeyNN {
+
+public class MusicKeyNN implements IMusicKeyNN {
 	BasicNetwork network = new BasicNetwork();
 	int ins, outs;
-	int[] neuron_numbers;
+	int[] hiddenNeurons;
+
+	public BasicNetwork getNetwork() {
+		return network;
+	}
+
+	public void setNetwork(BasicNetwork network) {
+		this.network = network;
+	}
+
+	public int getIns() {
+		return ins;
+	}
+
+	public void setIns(int ins) {
+		this.ins = ins;
+	}
+
+	public int getOuts() {
+		return outs;
+	}
+
+	public void setOuts(int outs) {
+		this.outs = outs;
+	}
+
+	public int[] getHiddenNeurons() {
+		return hiddenNeurons;
+	}
+
+	public void setHiddenNeurons(int[] neuron_numbers) {
+		this.hiddenNeurons = neuron_numbers;
+	}
 
 	public MusicKeyNN(int ins, int outs, int[] neuron_numbers) {
 		this.ins = ins;
 		this.outs = outs;
-		this.neuron_numbers = neuron_numbers;
+		this.hiddenNeurons = neuron_numbers;
 
 		network.addLayer(new BasicLayer(null, true, ins));
 		for (int i = 0; i < neuron_numbers.length; i++) {
@@ -38,11 +74,7 @@ public class MusicKeyNN {
 		network.reset();
 	}
 
-	public void train(String training_file) throws FileNotFoundException,
-			IOException {
-		CSVTestSetInOutput testSet = new CSVTestSetLoader(training_file)
-				.readCSV(ins, outs);
-
+	public void train(CSVTestSetInOutput testSet){
 		List <MLDataPair> ml = new Vector<MLDataPair>();
 		
 		for (int x =0 ; x < testSet.getInput().size(); x++){
@@ -84,9 +116,11 @@ public class MusicKeyNN {
 			}
 			System.out.println("");
 		}
-
-		Encog.getInstance().shutdown();
-
 	}
-
+	
+	public double[] compute(double[] input){
+		double[] output = new double[outs];
+		network.compute(input,output);
+		return output;
+	}
 }

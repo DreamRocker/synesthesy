@@ -1,4 +1,4 @@
-package de.synesthesy.nn;
+package de.synesthesy.csv;
 
 import java.util.Vector;
 

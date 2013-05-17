@@ -1,11 +1,11 @@
-package de.synesthesy.nn;
+package de.synesthesy.csv;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import junit.framework.TestCase;
-import de.synesthesy.nn.CSVTestSetInOutput;
-import de.synesthesy.nn.CSVTestSetLoader;
+import de.synesthesy.csv.CSVTestSetInOutput;
+import de.synesthesy.csv.CSVTestSetLoader;
 
 public class CSVTestSetLoaderTest extends TestCase {
 	final static int ins = 12;
