@@ -33,7 +33,7 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/lib/core.jar</systemPath>
 		</dependency>
-	    <dependency>
+		<dependency>
 			<groupId>themidibus</groupId>
 			<artifactId>themidibus</artifactId>
 			<version>0.0.6</version>
@@ -49,15 +49,15 @@
 	<build>
 		<outputDirectory>library/classes</outputDirectory>
 		<directory>library</directory>
-		    <plugins>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <version>2.9</version>
-            <configuration>
-                <useFile>false</useFile>
-            </configuration>
-        </plugin>
-    </plugins>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.9</version>
+				<configuration>
+					<useFile>false</useFile>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 </project>
