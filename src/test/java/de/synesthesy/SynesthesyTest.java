@@ -3,18 +3,18 @@ package de.synesthesy;
 import java.util.Vector;
 
 import de.synesthesy.music.MusicKey;
+import de.synesthesy.music.Note.Note;
 
 import junit.framework.TestCase;
-import themidibus.Note;
 
 public class SynesthesyTest extends TestCase {
 
 	public void testSynesthesy() {
-		Synesthesy syn = new Synesthesy();
+		Synesthesy syn = Synesthesy.getInstance();
 	}
 
 	public void testGetMusicKey() {
-		Synesthesy syn = new Synesthesy();
+		Synesthesy syn = Synesthesy.getInstance();
 		Vector<Note> notes = new Vector <Note>();
 		notes.add(new Note (0,127,(long)1));
 		notes.add(new Note (4,127,(long)1));

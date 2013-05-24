@@ -2,26 +2,49 @@ package de.synesthesy;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
+import java.util.logging.Logger;
 
-import themidibus.Note;
-
+import de.synesthesy.cache.CachePerChannel;
 import de.synesthesy.csv.CSVTestSetInOutput;
 import de.synesthesy.csv.CSVTestSetLoader;
 import de.synesthesy.music.MusicKey;
+import de.synesthesy.music.Note.Note;
 import de.synesthesy.nn.*;
 
+/**
+ * Synesthesy is the main class to access all functionality.
+ * All pressed or realeased key are stored in the cache and can be accessed from here.
+ * @author Marc Koderer
+ *
+ */
 public class Synesthesy {
+	private static final Logger log = Logger.getLogger( Synesthesy.class.getName() );
+	private Map<Integer, CachePerChannel> caches = new HashMap<Integer, CachePerChannel>();
 	private int nnInputs = 12;
 	private int nnOutputs = 15;
 	private int[] nnHidden = { 24 };
-	private IMusicKeyNN keyDetermination;
-
-	public Synesthesy() {
+	private IMusicKeyNN keyDetermination; 
+	private static Synesthesy synesthesy;
+	private Synesthesy() {
 		keyDetermination = new PreTrainedMusicKeyNN();
 	}
 	
-	public Synesthesy(String path) {
+	public static Synesthesy getInstance(){
+		if (synesthesy == null){
+			synesthesy = new Synesthesy();
+			synesthesy.init();
+		}
+		return synesthesy;
+	}
+	
+	public void init(){
+		
+	}
+	
+/*	public Synesthesy(String path) {
 		keyDetermination = new MusicKeyNN(nnInputs, nnOutputs, nnHidden);
 		CSVTestSetInOutput csv;
 		try {
@@ -35,7 +58,7 @@ public class Synesthesy {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
+	}*/
 
 	public MusicKey getMusicKey(Vector<Note> notes) {
 		double[] inp = new double[12];
@@ -66,4 +89,56 @@ public class Synesthesy {
 		
 		return mKey;
 	}
+	/**
+	 * Register an "pressNote" event for a given channel and stores it in the corresponing cache
+	 * @param nt the note
+	 * @param channel the channel
+	 */
+	public void registerNoteEvent(Note nt, int channel){
+		log.fine("Received event "+nt + "from Channel "+ channel);
+		if (caches.get(channel) == null){
+			caches.put(new Integer(channel), new CachePerChannel(channel));
+		}
+		caches.get(channel).addNote(nt);
+	}
+	
+	/**
+	 * This searches for a pressed key and closes it.
+	 * @see Note
+	 * @see NoteValue  
+	 * @param nt
+	 * @param channel
+	 */
+	public void closeNoteEvent(Note nt, int channel){
+		log.fine("Received release "+nt + "from Channel "+ channel);
+		if (caches.get(channel) == null){
+			log.warning("Cannot find releated note object");
+			return ;
+		}
+		for (Note cachedNote : caches.get(channel).getNoteVector()){
+			if (cachedNote.isPressed() && cachedNote.equals(nt)){
+				cachedNote.registerRelease(nt.getTimeStamp());
+			}
+		}
+	}
+	
+	/** 
+	 * @return the full cache map
+	 */
+	public Map<Integer, CachePerChannel> getCaches() {
+		return caches;
+	}
+	
+	/**
+	 * @return all played notes (unsorted)
+	 */
+	public Vector<Note> getAllPlayedNotes(){
+		Vector<Note> result = new Vector<Note>();
+		for (int channel:caches.keySet()){
+			result.addAll(caches.get(channel).getNoteVector());
+		}
+		return result;
+	}
+
+
 }

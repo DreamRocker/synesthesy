@@ -34,16 +34,14 @@
 			<systemPath>${project.basedir}/lib/core.jar</systemPath>
 		</dependency>
 		<dependency>
-			<groupId>themidibus</groupId>
-			<artifactId>themidibus</artifactId>
-			<version>0.0.6</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/themidibus.jar</systemPath>
-		</dependency>
-		<dependency>
 			<groupId>net.sf.opencsv</groupId>
 			<artifactId>opencsv</artifactId>
 			<version>2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-math3</artifactId>
+			<version>3.0</version>
 		</dependency>
 	</dependencies>
 	<build>

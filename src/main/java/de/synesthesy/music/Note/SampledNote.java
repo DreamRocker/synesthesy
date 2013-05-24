@@ -1,6 +1,4 @@
-package de.synesthesy.music;
-
-import themidibus.Note;
+package de.synesthesy.music.Note;
 
 public class SampledNote extends Note implements Cloneable {
 	private int sampleInterval;

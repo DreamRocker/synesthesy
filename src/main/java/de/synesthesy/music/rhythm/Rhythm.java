@@ -2,7 +2,7 @@ package de.synesthesy.music.rhythm;
 
 import java.util.Vector;
 
-import de.synesthesy.music.SampledNote;
+import de.synesthesy.music.Note.SampledNote;
 
 public class Rhythm {
 	Vector<SampledNote> rhythmicNotes;

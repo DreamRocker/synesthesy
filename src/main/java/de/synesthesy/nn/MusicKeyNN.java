@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Logger;
 
 import org.encog.Encog;
 import org.encog.engine.network.activation.ActivationSigmoid;
@@ -18,11 +19,14 @@ import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 
+import de.synesthesy.Synesthesy;
 import de.synesthesy.csv.CSVTestSetInOutput;
 import de.synesthesy.csv.CSVTestSetLoader;
 
 
 public class MusicKeyNN implements IMusicKeyNN {
+	private static final Logger log = Logger.getLogger( Synesthesy.class.getName() );
+	
 	BasicNetwork network = new BasicNetwork();
 	int ins, outs;
 	int[] hiddenNeurons;
@@ -103,7 +107,7 @@ public class MusicKeyNN implements IMusicKeyNN {
 			epoch++;
 		} while (train.getError() > 0.001);
 
-		// test the neural network
+/*		// test the neural network
 		System.out.println("Neural Network Results:");
 		for (MLDataPair pair : trainingSet) {
 			final MLData output = network.compute(pair.getInput());
@@ -115,7 +119,7 @@ public class MusicKeyNN implements IMusicKeyNN {
 				System.out.printf("%.2f ", output.getData(in));
 			}
 			System.out.println("");
-		}
+		}*/
 	}
 	
 	public double[] compute(double[] input){

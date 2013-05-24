@@ -2,9 +2,8 @@ package de.synesthesy.music;
 
 import java.util.Vector;
 
+import de.synesthesy.music.Note.SampledNote;
 import de.synesthesy.music.rhythm.RhythmAnalyzer;
-
-import themidibus.Note;
 
 import junit.framework.TestCase;
 

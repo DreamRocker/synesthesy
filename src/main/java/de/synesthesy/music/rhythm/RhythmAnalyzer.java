@@ -1,13 +1,17 @@
 package de.synesthesy.music.rhythm;
 
 import java.util.Vector;
+import java.util.logging.Logger;
 
-import org.apache.commons.math.stat.correlation.PearsonsCorrelation;
+import org.apache.commons.math3.complex.Complex;
+import org.apache.commons.math3.transform.FastFourierTransformer;
+import org.apache.commons.math3.transform.DftNormalization;
+import org.apache.commons.math3.transform.TransformType;
 
-import de.synesthesy.music.SampledNote;
+import de.synesthesy.cache.CachePerChannel;
+import de.synesthesy.music.Note.Note;
+import de.synesthesy.music.Note.SampledNote;
 import de.synesthesy.music.util.ErrorFunction;
-
-import themidibus.Note;
 
 /**
  * This class detects a rhythm out of a given note vector
@@ -16,18 +20,25 @@ import themidibus.Note;
  *
  */
 public class RhythmAnalyzer {
+	private static final Logger log = Logger.getLogger( CachePerChannel.class.getName() );
 	Vector <SampledNote> playedNotes = new Vector <SampledNote>();
-	long sampleRate = 10000;
+	int sampleRate = 512;
 	int looseFactor = 2;
 	
 	public void registerNote(Note note){
-		SampledNote nt = new SampledNote(note.getPitch(), note.getStrength(), note.getTicks());
-		System.out.println("Register note:" +nt.toString()+playedNotes.size());
+		SampledNote nt = new SampledNote(note.getPitch(), note.getStrength(), note.getTimeStamp());
 		playedNotes.add(nt);
 	}
 	
 	public Rhythm analyze(){
 		double[] sampledNotes = sampleDataFlat(playedNotes);
+		/*
+		FastFourierTransformer fft = new FastFourierTransformer(DftNormalization.STANDARD);
+		Complex[] cmp = fft.transform (sampledNotes, TransformType.FORWARD);
+		for (int i=0; i<cmp.length; i++){
+			System.out.println(cmp[i].getReal() + "\t"+cmp[i].getImaginary());
+		}
+ 		*/	
 		int sample = findInterval(sampledNotes);
 		Vector <SampledNote> rhythm = new Vector <SampledNote>();
 		for(SampledNote sm:playedNotes){
@@ -52,26 +63,27 @@ public class RhythmAnalyzer {
 	 */
 	public double[] sampleDataFlat(Vector <SampledNote> notes){
 		
-		long firstTick = notes.get(0).getTicks();
-		long lastTick =  notes.get(notes.size()-1).getTicks();
+		long firstTick = notes.get(0).getTimeStamp();
+		long lastTick =  notes.get(notes.size()-1).getTimeStamp();
 		long delta = lastTick - firstTick;
-		double[] corrVec = new double[(int) (delta / sampleRate)+1];
-		
-		int arrayCnt = 0;
+		//double[] corrVec = new double[(int) ((delta / sampleRate)+1)];
+		double[] corrVec = new double[sampleRate];
+		long tickRate = delta / sampleRate;
 		int noteCnt = 0;
-		for(long tick=firstTick; tick < lastTick; tick += sampleRate){
+		//for(long tick=firstTick; tick <= lastTick; tick += tickRate){
+		for(int i = 0; i < corrVec.length; i++){
+			long tick = firstTick + (i*tickRate);
 			for (int n = noteCnt; n<notes.size(); n++){
-				if ((tick+sampleRate)>notes.get(n).getTicks()){
-					System.out.println("Put "+notes.get(n).toString()+" to "+arrayCnt + " "+(tick+sampleRate)+">"+notes.get(n).getTicks()+" "+ (notes.get(n).getTicks()-notes.get((n==0)? 0:(n-1)).getTicks()));
-					corrVec[arrayCnt] += notes.get(n).getStrength();
-					notes.get(n).setSampleInterval(arrayCnt);
+				if ((tick+tickRate)>notes.get(n).getTimeStamp()){
+					log.finest("Put "+notes.get(n).toString()+" to "+i + " "+(tick+sampleRate)+">"+notes.get(n).getTimeStamp()+" "+ (notes.get(n).getTimeStamp()-notes.get((n==0)? 0:(n-1)).getTimeStamp()));
+					corrVec[i] += notes.get(n).getStrength();
+					notes.get(n).setSampleInterval(i);
 					notes.get(n).setSampleRate(sampleRate);
 					noteCnt++;
 				} else{
 					break;
 				}
 			}
-			arrayCnt++;
 		}
 		return corrVec;
 	}
@@ -132,11 +144,11 @@ public class RhythmAnalyzer {
 		this.playedNotes = playedNotes;
 	}
 
-	public long getSampleRate() {
+	public int getSampleRate() {
 		return sampleRate;
 	}
 
-	public void setSampleRate(long sampleRate) {
+	public void setSampleRate(int sampleRate) {
 		this.sampleRate = sampleRate;
 	}
 }

@@ -1,3 +1,5 @@
 Version 0.01
 
  - Get rid of libs dependencies (like csv)
+ - Add java.util.logging
+ - Enhance javadoc
