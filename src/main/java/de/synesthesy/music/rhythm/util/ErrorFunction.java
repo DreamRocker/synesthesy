@@ -1,4 +1,4 @@
-package de.synesthesy.music.util;
+package de.synesthesy.music.rhythm.util;
 
 public class ErrorFunction {
 	private static ErrorFunction errorFunction;

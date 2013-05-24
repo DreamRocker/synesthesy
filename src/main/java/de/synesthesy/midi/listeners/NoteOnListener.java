@@ -4,6 +4,7 @@ import javax.sound.midi.ShortMessage;
 
 import de.synesthesy.Synesthesy;
 import de.synesthesy.music.Note.Note;
+import de.synesthesy.music.cache.CacheDispatcher;
 
 public class NoteOnListener implements IMidiListener {
 
@@ -14,9 +15,9 @@ public class NoteOnListener implements IMidiListener {
 
 	@Override
 	public void receiveMessage(ShortMessage sm, long ticks) {
-		Synesthesy sy = Synesthesy.getInstance();
+		CacheDispatcher cd = CacheDispatcher.getInstance();
 		Note nt = new Note(sm.getData1(), sm.getData2(), ticks);
-		sy.registerNoteEvent(nt, sm.getChannel());
+		cd.add(nt, sm.getChannel());	
 	}
 
 }

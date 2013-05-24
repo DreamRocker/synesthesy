@@ -5,6 +5,8 @@ import java.io.IOException;
 
 import de.synesthesy.csv.CSVTestSetInOutput;
 import de.synesthesy.csv.CSVTestSetLoader;
+import de.synesthesy.music.key.nn.IMusicKeyNN;
+import de.synesthesy.music.key.nn.PreTrainedMusicKeyNN;
 
 import junit.framework.TestCase;
 

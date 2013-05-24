@@ -8,10 +8,10 @@ import org.apache.commons.math3.transform.FastFourierTransformer;
 import org.apache.commons.math3.transform.DftNormalization;
 import org.apache.commons.math3.transform.TransformType;
 
-import de.synesthesy.cache.CachePerChannel;
 import de.synesthesy.music.Note.Note;
 import de.synesthesy.music.Note.SampledNote;
-import de.synesthesy.music.util.ErrorFunction;
+import de.synesthesy.music.cache.PerChannel;
+import de.synesthesy.music.rhythm.util.ErrorFunction;
 
 /**
  * This class detects a rhythm out of a given note vector
@@ -20,7 +20,7 @@ import de.synesthesy.music.util.ErrorFunction;
  *
  */
 public class RhythmAnalyzer {
-	private static final Logger log = Logger.getLogger( CachePerChannel.class.getName() );
+	private static final Logger log = Logger.getLogger( PerChannel.class.getName() );
 	Vector <SampledNote> playedNotes = new Vector <SampledNote>();
 	int sampleRate = 512;
 	int looseFactor = 2;

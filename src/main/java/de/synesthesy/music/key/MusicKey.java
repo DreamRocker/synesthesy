@@ -1,4 +1,4 @@
-package de.synesthesy.music;
+package de.synesthesy.music.key;
 
 import java.util.Collections;
 import java.util.HashMap;

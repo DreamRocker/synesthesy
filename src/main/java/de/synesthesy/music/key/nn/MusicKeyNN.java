@@ -1,4 +1,4 @@
-package de.synesthesy.nn;
+package de.synesthesy.music.key.nn;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package de.synesthesy.nn;
+package de.synesthesy.music.key.nn;
 
 public class PreTrainedMusicKeyNN extends MusicKeyNN implements IMusicKeyNN {
 	final static int ins = 12;
