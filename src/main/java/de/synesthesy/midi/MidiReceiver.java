@@ -3,11 +3,13 @@ package de.synesthesy.midi;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
+import java.util.logging.Logger;
 
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.Receiver;
 import javax.sound.midi.ShortMessage;
 
+import de.synesthesy.Synesthesy;
 import de.synesthesy.midi.listeners.IMidiListener;
 
 /**
@@ -16,17 +18,20 @@ import de.synesthesy.midi.listeners.IMidiListener;
  *
  */
 public class MidiReceiver implements Receiver {
+	private static final Logger log = Logger.getLogger( MidiReceiver.class.getName() );
 	Map <Integer, Vector<IMidiListener>> listeners= new HashMap <Integer, Vector<IMidiListener>>();
 	int channel;
 	@Override
 	public void send(MidiMessage message, long timeStamp) {
+		log.finest("Received message: "+message);
 		if (message instanceof ShortMessage){
 			ShortMessage sm = (ShortMessage) message;
 			if (listeners.get(sm.getCommand()) != null){
 				for (IMidiListener listener : listeners.get(sm.getCommand())){
 					listener.receiveMessage(sm, timeStamp);
 				}
-			} else if (listeners.get(0) != null){
+			} 
+			if (listeners.get(0) != null){
 				/* catch all listeners */
 				for (IMidiListener listener : listeners.get(0)) {
 					listener.receiveMessage(sm, timeStamp);

@@ -6,6 +6,10 @@ import de.synesthesy.music.Note.Note;
 
 public class PressedNotes implements ICache {
 	LinkedHashSet <Note> cache = new LinkedHashSet<Note>();
+	public LinkedHashSet<Note> getCache() {
+		return cache;
+	}
+
 	@Override
 	public boolean intressed(Note note, int channel) {
 		if (note.isPressed()) return true;

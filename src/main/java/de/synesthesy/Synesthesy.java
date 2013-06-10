@@ -25,8 +25,6 @@ import de.synesthesy.music.key.nn.*;
 public class Synesthesy {
 	private static final Logger log = Logger.getLogger( Synesthesy.class.getName() );
 	int bpm = 120;
-	MidiHandler midiHandler;
-	CacheDispatcher cacheDispatcher;
 	
 	private static Synesthesy synesthesy;
 	private Synesthesy() {
@@ -44,8 +42,8 @@ public class Synesthesy {
 	 * The main initialization function
 	 */
 	private void init(){
-		midiHandler.getInstance().init();
-		cacheDispatcher.getInstance().init();
+		MidiHandler.getInstance().init();
+		CacheDispatcher.getInstance().init();
 	}
 	
 

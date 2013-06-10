@@ -27,10 +27,18 @@ public class PerChannel implements ICache {
 	public void setMaxSize(int maxSize) {
 		this.maxSize = maxSize;
 	}
+	
+	public Map<Integer, Vector<Note>> getCaches() {
+		return caches;
+	}
+	
+	public Vector<Note> getCache(Integer channel) {
+		return caches.get(channel);
+	}
 
 	/**
 	 * Register an "pressNote" event for a given channel and stores it in the
-	 * corresponing cache
+	 * corresponding cache
 	 * 
 	 * @param nt
 	 *            the note

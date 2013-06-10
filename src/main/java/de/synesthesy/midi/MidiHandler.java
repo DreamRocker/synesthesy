@@ -18,7 +18,7 @@ public class MidiHandler {
 	
 	static public MidiHandler getInstance(){
 		if (midiHandler == null)
-			return new MidiHandler();
+			return midiHandler =  new MidiHandler();
 		return midiHandler;
 	}
 	
@@ -52,7 +52,7 @@ public class MidiHandler {
 					receivers.add(receiver);
 				}
 			} catch(MidiUnavailableException e) {
-				//Device was unavailable which is fine, we only care about available inputs
+				//Device was unavailable
 			}
 		}
 	}

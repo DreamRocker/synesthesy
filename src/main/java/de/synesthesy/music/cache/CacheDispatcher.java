@@ -25,8 +25,10 @@ public class CacheDispatcher {
 	}
 	
 	public void init(){
+		/* no all caches should be registered from the outside
 		caches.add(new PerChannel());
 		caches.add(new PressedNotes());
+		*/
 	}
 
 	public void registerCache(String cache) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
