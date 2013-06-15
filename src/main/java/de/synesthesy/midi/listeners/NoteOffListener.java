@@ -15,6 +15,7 @@ public class NoteOffListener implements IMidiListener{
 	public void receiveMessage(ShortMessage sm, long ticks) {
 		CacheDispatcher cd = CacheDispatcher.getInstance();
 		Note nt = new Note(sm.getData1(), sm.getData2(), ticks);
+		nt.setPressed(false);
 		cd.update(nt, sm.getChannel());	
 	}
 }

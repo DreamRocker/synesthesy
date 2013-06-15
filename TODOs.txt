@@ -1,5 +1,5 @@
 Version 0.01
 
  - Get rid of libs dependencies (like csv)
- - Add java.util.logging
+ - Use in-memory database for note/event cache
  - Enhance javadoc

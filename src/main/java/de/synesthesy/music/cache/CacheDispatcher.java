@@ -52,9 +52,7 @@ public class CacheDispatcher {
 	public void update(Note note, int channel){
 		for (ICache cache:caches){
 			if (cache.intressedOnUpdate(note, channel)){
-				/* if one reference of the note was found
-				we stop searching*/
-				if (cache.update(note, channel)) return;
+				cache.update(note, channel);
 			}
 		}
 	}
