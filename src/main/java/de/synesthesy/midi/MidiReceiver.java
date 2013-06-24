@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.Receiver;
 import javax.sound.midi.ShortMessage;
@@ -26,6 +27,13 @@ public class MidiReceiver implements Receiver {
 		log.finest("Received message: "+message);
 		if (message instanceof ShortMessage){
 			ShortMessage sm = (ShortMessage) message;
+			if(message.getStatus() == ShortMessage.NOTE_ON && message.getMessage()[2] == 0) {
+				try {
+					sm.setMessage(ShortMessage.NOTE_OFF, sm.getChannel(), sm.getData1(), sm.getData2());
+				} catch (InvalidMidiDataException e) {
+					return;
+				}
+			}
 			if (listeners.get(sm.getCommand()) != null){
 				for (IMidiListener listener : listeners.get(sm.getCommand())){
 					listener.receiveMessage(sm, timeStamp);
