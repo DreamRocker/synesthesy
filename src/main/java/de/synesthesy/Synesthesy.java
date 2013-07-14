@@ -18,7 +18,7 @@ import de.synesthesy.music.key.nn.*;
 
 /**
  * Synesthesy is the main class to access all functionality.
- * All pressed or realeased key are stored in the cache and can be accessed from here.
+ * All pressed or released key are stored in the cache and can be accessed from here.
  * @author Marc Koderer
  *
  */

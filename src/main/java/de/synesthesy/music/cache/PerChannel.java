@@ -1,8 +1,8 @@
 package de.synesthesy.music.cache;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 import de.synesthesy.music.Note.Note;
@@ -16,7 +16,8 @@ import de.synesthesy.music.Note.Note;
 public class PerChannel implements ICache {
 	private static final Logger log = Logger.getLogger(PerChannel.class
 			.getName());
-	private Map<Integer, Vector<Note>> caches = new HashMap<Integer, Vector<Note>>();
+	private Map<Integer, Vector<Note>> caches = 
+			new ConcurrentHashMap<Integer, Vector<Note>>();
 
 	int maxSize = 128;
 	
@@ -52,9 +53,10 @@ public class PerChannel implements ICache {
 		Vector<Note> currVector = caches.get(channel);
 		if (currVector.size() > maxSize) {
 			int toBeRemoved = currVector.size() - maxSize;
-			log.finest("MaxSize reached remove " + toBeRemoved + "Entries");
+			log.finest("Maximal size reached: remove " + toBeRemoved + "Entries");
 			for (int i = 0; i < toBeRemoved; i++)
-				currVector.remove(i);
+				currVector.iterator().remove();
+			
 		}
 		currVector.add(note);
 	}

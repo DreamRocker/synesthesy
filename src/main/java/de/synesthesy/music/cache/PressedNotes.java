@@ -1,12 +1,15 @@
 package de.synesthesy.music.cache;
 
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.Set;
 
 import de.synesthesy.music.Note.Note;
 
 public class PressedNotes implements ICache {
-	LinkedHashSet <Note> cache = new LinkedHashSet<Note>();
-	public LinkedHashSet<Note> getCache() {
+	Set <Note> cache = Collections.synchronizedSet(new LinkedHashSet<Note>());
+	public Set<Note> getCache() {
 		return cache;
 	}
 
@@ -28,7 +31,13 @@ public class PressedNotes implements ICache {
 
 	@Override
 	public boolean update(Note note, int channel) {
-		return cache.remove(note);
+		for (Iterator<Note> it = cache.iterator(); it.hasNext();){
+			if (it.next().equals(note)){
+				it.remove();
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
