@@ -135,11 +135,11 @@ public class Note {
 		this.timeStamp = ticks;
 	}
 
-	public boolean isPressed() {
+	public synchronized boolean isPressed() {
 		return pressed;
 	}
 
-	public void setPressed(boolean pressed) {
+	public synchronized void setPressed(boolean pressed) {
 		this.pressed = pressed;
 	}
 
@@ -213,7 +213,7 @@ public class Note {
 	 * @see NoteValue
 	 * @param timeStamp
 	 */
-	public void registerRelease(long timeStamp){
+	public synchronized void registerRelease(long timeStamp){
 		this.setPressed(false);
 		this.noteValue = new NoteValue();
 		this.noteValue.setDuration(this.timeStamp - timeStamp);
