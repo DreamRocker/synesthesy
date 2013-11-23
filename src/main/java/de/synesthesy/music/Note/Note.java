@@ -40,6 +40,7 @@ public class Note {
 	int octave;
 	int strength;
 	long timeStamp;
+	long javaTimeStamp;
 	boolean pressed = true;
 	NoteValue noteValue;
 
@@ -64,6 +65,7 @@ public class Note {
 		setPitch(pitch);
 		this.strength = strength;
 		this.timeStamp = ticks;
+		this.javaTimeStamp = System.currentTimeMillis();
 	}
 
 	/***
@@ -106,7 +108,21 @@ public class Note {
 	 * @return The strength (max. 127)
 	 */
 	public int getStrength() {
+		
 		return strength;
+	}
+
+	public int getStrengthDecayed(){
+		return this.getStrengthDecayed(0.000036f);
+	}
+	
+	public int getStrengthDecayed(float instrumentConst){
+		long delta = System.currentTimeMillis() - this.getJavaTimeStamp();
+		double strength = this.getStrength() * Math.exp(-delta*instrumentConst*(this.getPitch()+1));
+		if (strength < 1){
+			return 0;
+		}
+		return (int) strength;
 	}
 
 	/**
@@ -217,6 +233,14 @@ public class Note {
 		this.setPressed(false);
 		this.noteValue = new NoteValue();
 		this.noteValue.setDuration(this.timeStamp - timeStamp);
+	}
+
+	public long getJavaTimeStamp() {
+		return javaTimeStamp;
+	}
+
+	public void setJavaTimeStamp(long javaTimeStamp) {
+		this.javaTimeStamp = javaTimeStamp;
 	}
 
 }
