@@ -31,6 +31,7 @@ public class MusicKey {
 			});
 
 	String key;
+	int keyValue;
 	boolean isMinor;
 	boolean is7;
 	boolean isMaj7;
@@ -40,9 +41,32 @@ public class MusicKey {
 	
 	MusicKey dominant;
 	MusicKey subDominant;
+	MusicKey tonicaParallel;
+	MusicKey dominantParallel;
+	MusicKey subDominantParallel;
+	
+	public MusicKey(int keyValue, boolean minor){
+		this(keyValue);
+		this.setMinor(minor);
+	}
 	
 	public MusicKey(int keyValue){
 		key = KeyMap.get(keyValue);
+		this.keyValue = keyValue;
+	}
+	
+	public void determineChordFunctions(){
+		dominant = new MusicKey((keyValue + 7) % 12, this.isMinor);
+		subDominant = new MusicKey((keyValue + 5) % 12, this.isMinor);
+		if (!isMinor){
+			tonicaParallel = new MusicKey((keyValue + 9) % 12, ! this.isMinor);
+			dominantParallel = new MusicKey((keyValue + 4) % 12, ! this.isMinor);
+			subDominantParallel = new MusicKey((keyValue + 2) % 12, ! this.isMinor);
+		}else{
+			tonicaParallel = new MusicKey((keyValue + 3) % 12, ! this.isMinor);
+			dominantParallel = new MusicKey((keyValue + 10) % 12, ! this.isMinor);
+			subDominantParallel = new MusicKey((keyValue + 8) % 12, ! this.isMinor);
+		}
 	}
 
 	@Override
@@ -150,6 +174,18 @@ public class MusicKey {
 
 	public void setSubDominant(MusicKey subDominant) {
 		this.subDominant = subDominant;
+	}
+
+	public MusicKey getTonicaParallel() {
+		return tonicaParallel;
+	}
+
+	public MusicKey getDominantParallel() {
+		return dominantParallel;
+	}
+
+	public MusicKey getSubDominantParallel() {
+		return subDominantParallel;
 	}
 
 

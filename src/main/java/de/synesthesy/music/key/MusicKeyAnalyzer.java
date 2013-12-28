@@ -48,6 +48,8 @@ public class MusicKeyAnalyzer {
 		}
 		mKey.setDisonant(output[15]);
 		mKey.setOutputs(output);
+		mKey.determineChordFunctions();
+
 		return mKey;
 	}
 
