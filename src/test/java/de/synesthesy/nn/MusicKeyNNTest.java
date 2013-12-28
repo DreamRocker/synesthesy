@@ -12,7 +12,7 @@ import junit.framework.TestCase;
 public class MusicKeyNNTest extends TestCase {
 	MusicKeyNN nn;
 	final static int inputs = 12;
-	final static int outputs = 15;
+	final static int outputs = 16;
 
 	public void testMusicKeyNN() {
 		int []hidden_neurons = { 5,9,6};

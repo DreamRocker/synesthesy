@@ -46,7 +46,8 @@ public class MusicKeyAnalyzer {
 		if (output[14] > 0.5){
 			mKey.setMinor(true);
 		}
-		
+		mKey.setDisonant(output[15]);
+		mKey.setOutputs(output);
 		return mKey;
 	}
 

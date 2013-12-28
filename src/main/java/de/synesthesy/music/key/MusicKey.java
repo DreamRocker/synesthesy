@@ -34,6 +34,10 @@ public class MusicKey {
 	boolean isMinor;
 	boolean is7;
 	boolean isMaj7;
+	double isDisonant;
+	
+	double[] outputs;
+	
 	MusicKey dominant;
 	MusicKey subDominant;
 	
@@ -114,6 +118,22 @@ public class MusicKey {
 
 	public void setMaj7(boolean isMaj7) {
 		this.isMaj7 = isMaj7;
+	}
+
+	public double getDisonant() {
+		return isDisonant;
+	}
+
+	public void setDisonant(double isDisonant) {
+		this.isDisonant = isDisonant;
+	}
+
+	public double[] getOutputs() {
+		return outputs;
+	}
+
+	public void setOutputs(double[] outputs) {
+		this.outputs = outputs;
 	}
 
 	public MusicKey getDominant() {
