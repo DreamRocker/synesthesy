@@ -24,29 +24,33 @@ public class MidiReceiver implements Receiver {
 	int channel;
 	@Override
 	public void send(MidiMessage message, long timeStamp) {
-		log.finest("Received message: "+message);
-		if (message instanceof ShortMessage){
-			ShortMessage sm = (ShortMessage) message;
-			if(message.getStatus() == ShortMessage.NOTE_ON && message.getMessage()[2] == 0) {
-				try {
-					sm.setMessage(ShortMessage.NOTE_OFF, sm.getChannel(), sm.getData1(), sm.getData2());
-				} catch (InvalidMidiDataException e) {
-					return;
+		try{
+			log.finest("Received message: "+message);
+			if (message instanceof ShortMessage){
+				ShortMessage sm = (ShortMessage) message;
+				if(message.getStatus() == ShortMessage.NOTE_ON && message.getMessage()[2] == 0) {
+					try {
+						sm.setMessage(ShortMessage.NOTE_OFF, sm.getChannel(), sm.getData1(), sm.getData2());
+					} catch (InvalidMidiDataException e) {
+						return;
+					}
 				}
-			}
-			if (listeners.get(sm.getCommand()) != null){
-				for (IMidiListener listener : listeners.get(sm.getCommand())){
-					listener.receiveMessage(sm, timeStamp);
-				}
-			} 
-			if (listeners.get(0) != null){
-				/* catch all listeners */
-				for (IMidiListener listener : listeners.get(0)) {
-					listener.receiveMessage(sm, timeStamp);
+				if (listeners.get(sm.getCommand()) != null){
+					for (IMidiListener listener : listeners.get(sm.getCommand())){
+						listener.receiveMessage(sm, timeStamp);
+					}
+				} 
+				if (listeners.get(0) != null){
+					/* catch all listeners */
+					for (IMidiListener listener : listeners.get(0)) {
+						listener.receiveMessage(sm, timeStamp);
+					}
 				}
 			}
 		}
-		
+		catch(Exception e){
+			log.warning(e.getMessage());
+		}
 	}
 	/**
 	 * This function registers a listener
