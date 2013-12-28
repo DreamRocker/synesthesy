@@ -68,6 +68,10 @@ public class MusicKey {
 			subDominantParallel = new MusicKey((keyValue + 8) % 12, ! this.isMinor);
 		}
 	}
+	
+	public int getValue(){
+		return keyValue;
+	}
 
 	@Override
 	public int hashCode() {
