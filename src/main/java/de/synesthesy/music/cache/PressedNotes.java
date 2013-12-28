@@ -9,7 +9,8 @@ import de.synesthesy.music.Note.Note;
 
 public class PressedNotes implements ICache {
 	Set <Note> cache = Collections.synchronizedSet(new LinkedHashSet<Note>());
-	public Set<Note> getCache() {
+
+	public synchronized Set<Note> getCache() {
 		return cache;
 	}
 
@@ -20,7 +21,7 @@ public class PressedNotes implements ICache {
 	}
 
 	@Override
-	public void addNote(Note note, int channel) {
+	public synchronized void addNote(Note note, int channel) {
 		cache.add(note);
 	}
 
@@ -30,7 +31,7 @@ public class PressedNotes implements ICache {
 	}
 
 	@Override
-	public boolean update(Note note, int channel) {
+	public synchronized boolean update(Note note, int channel) {
 		for (Iterator<Note> it = cache.iterator(); it.hasNext();){
 			if (it.next().equals(note)){
 				it.remove();
