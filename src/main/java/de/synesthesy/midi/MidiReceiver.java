@@ -21,13 +21,18 @@ import de.synesthesy.midi.listeners.IMidiListener;
 public class MidiReceiver implements Receiver {
 	private static final Logger log = Logger.getLogger( MidiReceiver.class.getName() );
 	Map <Integer, Vector<IMidiListener>> listeners= new HashMap <Integer, Vector<IMidiListener>>();
+	Vector<MidiMessage> sustain_cache = new Vector<MidiMessage>();
 	int channel;
+	boolean sustain_pressed = false;
+	
 	@Override
 	public void send(MidiMessage message, long timeStamp) {
 		try{
-			log.finest("Received message: "+message);
+			log.finest("Received message: "+ message);
 			if (message instanceof ShortMessage){
 				ShortMessage sm = (ShortMessage) message;
+				byte[] arr = message.getMessage();
+				int i = message.getStatus();
 				if(message.getStatus() == ShortMessage.NOTE_ON && message.getMessage()[2] == 0) {
 					try {
 						sm.setMessage(ShortMessage.NOTE_OFF, sm.getChannel(), sm.getData1(), sm.getData2());
@@ -35,6 +40,28 @@ public class MidiReceiver implements Receiver {
 						return;
 					}
 				}
+				if (message.getStatus() == ShortMessage.CONTROL_CHANGE && message.getMessage()[1] == 64){
+					/* if sustain is pressed we have to bypass all note_off's
+					 * if it's released we have to dispatch all note_off's
+					 */
+					if (message.getMessage()[2] > 63){
+						this.sustain_pressed = true;
+					}
+					if (message.getMessage()[2] < 64){
+						if (this.sustain_pressed){
+							this.sustain_pressed = false;
+							for (MidiMessage m : sustain_cache){
+								this.send(m, timeStamp);
+							}
+							sustain_cache.clear();
+						}
+					}
+				}
+				if (message.getStatus() == ShortMessage.NOTE_OFF && this.sustain_pressed){
+					sustain_cache.add(message);
+					return;
+				}
+				
 				if (listeners.get(sm.getCommand()) != null){
 					for (IMidiListener listener : listeners.get(sm.getCommand())){
 						listener.receiveMessage(sm, timeStamp);
