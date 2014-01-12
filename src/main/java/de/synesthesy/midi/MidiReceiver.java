@@ -3,6 +3,7 @@ package de.synesthesy.midi;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.sound.midi.InvalidMidiDataException;
@@ -30,7 +31,12 @@ public class MidiReceiver implements Receiver {
 		try{
 			log.finest("Received message: "+ message);
 			if (message instanceof ShortMessage){
-				ShortMessage sm = (ShortMessage) message;
+				ShortMessage sm = (ShortMessage) message;				
+				log.fine(String.format("Received message [Channel: %d]:"+
+									   "cmd %d, d1 %d, d2 %d, stat %d", 
+									   sm.getChannel(), sm.getCommand(),
+									   sm.getData1(), sm.getData2(), 
+									   sm.getStatus()));
 				byte[] arr = message.getMessage();
 				int i = message.getStatus();
 				if(message.getStatus() == ShortMessage.NOTE_ON && message.getMessage()[2] == 0) {
@@ -49,6 +55,7 @@ public class MidiReceiver implements Receiver {
 					}
 					if (message.getMessage()[2] < 64){
 						if (this.sustain_pressed){
+							log.finest("Sustain released dispatch all note off messages");
 							this.sustain_pressed = false;
 							for (MidiMessage m : sustain_cache){
 								this.send(m, timeStamp);
@@ -59,6 +66,7 @@ public class MidiReceiver implements Receiver {
 				}
 				if (message.getStatus() == ShortMessage.NOTE_OFF && this.sustain_pressed){
 					sustain_cache.add(message);
+					log.finest("Sustain pressed - store message in cache");
 					return;
 				}
 				
@@ -76,7 +84,7 @@ public class MidiReceiver implements Receiver {
 			}
 		}
 		catch(Exception e){
-			log.warning(e.getMessage());
+			log.log(Level.SEVERE, "Error in midi processing", e);
 		}
 	}
 	/**
