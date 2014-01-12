@@ -15,9 +15,9 @@ Features
  - Every note has a certain strength that decreases over time (Decayed Strength)
  - Support for the sustain pedal 
  - Music key analyze framework
-   - A neuronal network that is trained to determin the music key
+   - A neuronal network that is trained to determine the music key
    - This network can be trained with csv files and is easily enhancable
- - Rythmic analyze framework (not final yet)
+ - Rhythmic analyze framework (not final yet)
 
 License
 =======
